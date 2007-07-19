@@ -35,3 +35,7 @@ bool match_declaration(char* line_to_parse) {
 }}}
 
 This isn't complete. It doesn't handle C-style struct literals, for instance. But the concept is there. Each function tries to match what it knows how to match, and some functions do that by calling other functions.
+
+ * [YARDGeneralFAQ General Questions]
+ * [StackOverflow Stack Overflow Concerns]
+ * [AdministrativaFAQ Administrative Questions]
