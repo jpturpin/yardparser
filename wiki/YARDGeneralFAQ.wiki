@@ -16,3 +16,7 @@ Recursive descent parsers are known for being easy to implement, and for running
 YARD adresses all of the drawbacks Stroustrup mentions in that passage. YARD generates a recursive descent parser from a BNF-like grammar, just as Yacc generates a table-driven parser from a BNF-like grammar. Creating a grammar in YARD is as efficient for the programmer as is creating one in Yacc.
 
 Additionally, C++ exceptions make error recovery regular. Together, these facts make maintaining a YARD grammar much easier than maintaining a hand-written recursive descent parser.
+
+ * [RecursiveDescentFAQ Recursive Descent]
+ * [StackOverflow Stack Overflow Concerns]
+ * [AdministrativaFAQ Administrative Questions]
