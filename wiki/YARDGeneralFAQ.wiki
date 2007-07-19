@@ -1,6 +1,4 @@
 #labels FAQ
-= YARD General FAQ =
-
 == What is YARD? ==
 
 YARD is a C++ library that generates [RecursiveDescentFAQ recursive descent parsers] through a form of template metaprogramming.
