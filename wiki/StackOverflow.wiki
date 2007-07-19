@@ -1,56 +1,32 @@
 #labels FAQ
 = What about stack overflow? =
 
-The risk of stack overflow is very small.  Each stack frame should
-take up few dozen bytes, while the entire stack is usually at least
-two memory pages large.  On x86 chips, that's at least 8 KB, and
-Windows gives you 1 MB of stack space.  Things have to get incredibly
-complex before stack overflow becomes a real problem.
+The risk of stack overflow is very small.  Each stack frame should take up few dozen bytes, while the entire stack is usually at least two memory pages large.  On x86 chips, that's at least 8 KB, and Windows gives you 1 MB of stack space.  Things have to get incredibly complex before stack overflow becomes a real problem.
 
-But if you are seriousy concerned about stack overflow, write your
-rules like so:
+But if you are seriously concerned about stack overflow, write your rules like so:
 
 {{{
 typedef yard::Or<RuleA_T, RuleB_T> MyRule_impl;
 struct MyRule_T : MyRule_impl
 {
-    private:
-    const size_t GLOBAL_VARIABLE_BOTTOM_OF_STACK;
-    const size_t GLOBAL_VARIABLE_MAX_STACK_USE;
-
-    public:
     template<typename ParserState_T> static bool Match(ParserState_T& p) {
          char c; char* cp = &c;
-         if (cp - GLOBAL_VARIABLE_BOTTOM_OF_STACK
-                           > GLOBAL_VARIABLE_MAX_STACK_USE)
+         if (::check_for_stack_overflow(c)) // "::" for free function
          {
-               // stack overflow if things continue, return false to
-begin backtracking,
-               // or throw an exception and unwind stack completely,
-or do something else
+               /* stack overflow if things continue, return false to
+                  begin backtracking, or throw an exception and unwind
+                  stack completely, or do something else
+               */
          };
 
          return MyRule_impl::Match(p);
      }
-     ... // anything else you want in the class, including a
-constructor that sets the
-         // GLOBAL_VARIABLEs
+     ... // anything else you want in the class
 };
 }}}
 
-You probably would use something other than global variable for
-BOTTOM_OF_STACK and MAX_STACK_USE (and, if you're really concerned
-about the convention that the stack grows downward, you may even
-rename BOTTOM_OF_STACK).  If you can find out the largest valid value
-for the stack, you may be able to use more traditional bounds checking
-(if (cp > MAX_STACK_ADDY)).
+In this case, it will be up to you to determine the size of the stack and how much of that stack may be safely used.  You may consider using the functions in ucontext.h (if implemented on your platform) or the Windows `CreateFiber` function to create your own stack of a predetermined size.  Or you may know of some way of setting or finding the size of the stack on your platform.  If it's implemented correctly on your platform, you may even just pass `alloca` a large value and determine if the stack is at least that many bytes large.
 
-In this case, it will be up to you to determine correct values for
-BOTTOM_OF_STACK and MAX_STACK_USE.  You may consider using the
-functions in ucontext.h (if implemented on your platform) or the
-Windows CreateFiber function to create your own stack of a
-predetermined size.  Or you may know of some way of setting or finding
-the size of the stack on your platform.  If it's implemented correctly
-on your platform, you may even just pass alloca a large value and
-determine if the stack is at least that many bytes large.
+There are many interesting suggestions regarding fancier ways to handle stack overflow.  [http://lambda-the-ultimate.org/node/1599 One such proposal] is to create a stack of continuations.  However, implementing continuations in C++ can be tricky.  Simply allocating objects on the heap instead of on the stack isn't enough.  The memory where an object is allocated simply refers to where the data of that object is stored.  Stack overflow refers to running out of the memory that a function (or method) "runs in."  Creating a continuation in C++ requires either that the method or function in question not run in the program stack (possibly by running in some other stack, possibly through ucontext.h or `CreateFiber`) or that the program stack be saved and cleared whenever a function is called.  [http://www.google.com/search?q=c+continuations+setjmp Some people are willing to abuse setjmp/longjmp] to save and restore the stack, essentially "faking" continuations.  
 
+We believe that these techniques introduce much more complexity than the simple bounds checking demonstrated above.
