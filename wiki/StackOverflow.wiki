@@ -1,9 +1,15 @@
 #labels FAQ
-= What about stack overflow? =
+= Stack Overflow =
+
+== What about stack overflow? ==
+
+As soon as programmers learn about recursive functions, they are immediately taught about stack overflow and infinite recursion.  The concept of memory corruption almost immediately turns many programmers off to the idea of recursion altogether.
 
 The risk of stack overflow is very small.  Each stack frame should take up few dozen bytes, while the entire stack is usually at least two memory pages large.  On x86 chips, that's at least 8 KB, and Windows gives you 1 MB of stack space.  Things have to get incredibly complex before stack overflow becomes a real problem.
 
-But if you are seriously concerned about stack overflow, write your rules like so:
+As an example, we have a C++ source code highlighter that uses an earlier version of the YARD library.  We would feed that highlighter the entire [http://www.boost.org Boost] codebase for correctness and stress testing.  Although C++ is notorious for having a complex grammar, and Boost is notorious for having complex code -- including deeply nested templates -- the highlighter never crashed due to stack overflow.
+
+But if you are seriously concerned, write your rules like so:
 
 {{{
 typedef yard::Or<RuleA_T, RuleB_T> MyRule_impl;
@@ -25,8 +31,11 @@ struct MyRule_T : MyRule_impl
 };
 }}}
 
-In this case, it will be up to you to determine the size of the stack and how much of that stack may be safely used.  You may consider using the functions in ucontext.h (if implemented on your platform) or the Windows `CreateFiber` function to create your own stack of a predetermined size.  Or you may know of some way of setting or finding the size of the stack on your platform.  If it's implemented correctly, you may even just pass `alloca` a large value and determine if the stack is at least that many bytes large.
+In this case, it will be up to you to determine the size of the stack and how much of that stack may be safely used.  You may consider using the functions in ucontext.h (if implemented on your platform) or the Windows `CreateFiber` function to create your own stack of a predetermined size.  Or you may know of some way of setting or finding the size of the stack on your platform.  If it's implemented correctly, you may even just pass `alloca` a large value to determine if the stack is at least that many bytes large (releasing the block `alloca` allocates for you so that you can go ahead and use it).
 
 There are many interesting suggestions regarding fancier ways to handle stack overflow.  [http://lambda-the-ultimate.org/node/1599 One such proposal] is to create a stack of continuations.  However, implementing continuations in C++ can be tricky.  Simply allocating objects on the heap instead of on the stack isn't enough.  The memory where an object is allocated simply refers to where the data of that object is stored.  Stack overflow refers to running out of the memory that a function (or method) "runs in."  Creating a continuation in C++ requires either that the method or function in question not run in the program stack (possibly by running in some other stack, possibly through ucontext.h or `CreateFiber`) or that the program stack be saved and cleared whenever a function is called.  [http://www.google.com/search?q=c+continuations+setjmp Some people are willing to abuse setjmp/longjmp] to save and restore the stack for this.
 
 We believe that these techniques introduce much more complexity than the simple bounds checking demonstrated above.
+
+
+
