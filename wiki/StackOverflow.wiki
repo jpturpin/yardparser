@@ -1,6 +1,4 @@
 #labels FAQ
-= Stack Overflow =
-
 == What about stack overflow? ==
 
 As soon as programmers learn about recursive functions, they are immediately taught about stack overflow and infinite recursion.  The concept of memory corruption almost immediately turns many programmers off to the idea of recursion altogether.
