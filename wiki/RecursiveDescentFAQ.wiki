@@ -1,6 +1,4 @@
 #labels FAQ
-= Recursive Descent =
-
 == What's a recursive descent parser? ==
 A parser is simply a programming system for recognizing certain patterns in text. For instance, when you run source code through a compiler, the way the compiler knows `int x = 4` means "the variable `x` will hold an integer value, and will start life holding the value 4" is that it has a parser looking for statements that start with a type (in this case `int`), followed by a name (in this case `x`), possibly followed by an equals sign and a beginning value.
 
