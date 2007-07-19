@@ -3,7 +3,7 @@
 
 As soon as programmers learn about recursive functions, they are immediately taught about stack overflow and infinite recursion.  The concept of memory corruption almost immediately turns many programmers off to the idea of recursion altogether.
 
-The risk of stack overflow is very small.  Each stack frame should take up few dozen bytes, while the entire stack is usually at least two memory pages large.  On x86 chips, that's at least 8 KB, and Windows gives you 1 MB of stack space.  Things have to get incredibly complex before stack overflow becomes a real problem.
+The risk of stack overflow is very small.  Each stack frame should take up few dozen bytes, while the entire stack is usually at least two memory pages large.  On x86 chips, that's at least 8 KB, and platforms such as Windows give you 1 MB or more.  Things have to get incredibly complex before stack overflow becomes a real problem.
 
 As an example, we have a C++ source code highlighter that uses an earlier version of the YARD library.  We would feed that highlighter the entire [http://www.boost.org Boost] codebase for correctness and stress testing.  Although C++ is notorious for having a complex grammar, and Boost is notorious for having complex code -- including deeply nested templates -- the highlighter never crashed due to stack overflow.
 
