@@ -29,9 +29,19 @@ struct MyRule_T : MyRule_impl
 };
 }}}
 
-In this case, it will be up to you to determine the size of the stack and how much of that stack may be safely used.  You may consider using the functions in ucontext.h (if implemented on your platform) or the Windows `CreateFiber` function to create your own stack of a predetermined size.  Or you may know of some way of setting or finding the size of the stack on your platform.  If it's implemented correctly, you may even just pass `alloca` a large value to determine if the stack is at least that many bytes large (releasing the block `alloca` allocates for you so that you can go ahead and use it).
+In this case, it will be up to you to determine the size of the stack and how much of that stack may be safely used.  You may consider using the functions in ucontext.h (if implemented on your platform) or the Windows `CreateFiber` function to create your own stack of a predetermined size.  Or you may know of some way of setting or finding the size of the stack on your platform.
 
-There are many interesting suggestions regarding fancier ways to handle stack overflow.  [http://lambda-the-ultimate.org/node/1599 One such proposal] is to create a stack of continuations.  However, implementing continuations in C++ can be tricky.  Simply allocating objects on the heap instead of on the stack isn't enough.  The memory where an object is allocated simply refers to where the data of that object is stored.  Stack overflow refers to running out of the memory that a function (or method) "runs in."  Creating a continuation in C++ requires either that the method or function in question not run in the program stack (possibly by running in some other stack, possibly through ucontext.h or `CreateFiber`) or that the program stack be saved and cleared whenever a function is called.  [http://www.google.com/search?q=c+continuations+setjmp Some people are willing to abuse setjmp/longjmp] to save and restore the stack for this.
+If it's implemented correctly, `alloca` can handle this:
+
+{{{
+bool probe_stack(size_t needed_stack_frame_size) {
+    return static_cast<bool>(alloca(needed_stack_frame_size));
+};
+}}}
+
+`alloca` is defined to return an `int`, and if there is not enough space on the stack, it is supposed to return 0 (which casts to `false`).  The clever part is that once `probe_stack` returns, the memory `alloca` allocated from the stack is returned to the stack, which we can then use (there is no race condition because the stack is not shared with anything else, unless you've `fork`ed, in which case you're on your own).  Unfortunately, many implementations of `alloca` never return 0, so this does not work on those platforms.
+
+There are many interesting suggestions regarding fancier ways to handle stack overflow.  [http://lambda-the-ultimate.org/node/1599 One such proposal] is to create a stack of continuations.  However, implementing continuations in C++ can be tricky.  Simply allocating objects on the heap instead of on the stack isn't enough.  The memory where an object is allocated refers to where the data of that object is stored.  Stack overflow refers to running out of the memory that a function (or method) "runs in" -- a completely separate concept.  Creating a continuation in C++ requires either that the method or function in question not run in the main program stack (possibly by running in some other stack -- maybe through ucontext.h or `CreateFiber`) or that the program stack be saved and cleared whenever a function is called.  [http://www.google.com/search?q=c+continuations+setjmp Some people are willing to abuse setjmp/longjmp] to save and restore the stack for this.
 
 We believe that these techniques introduce much more complexity than the simple bounds checking demonstrated above.
 
