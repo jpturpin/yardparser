@@ -1,0 +1,9 @@
+#labels FAQ
+= Main FAQ =
+
+Because a good FAQ is always a work-in-progress, we have decided to implement ours as a Wiki.  Feel free to suggest new questions (or to simply ask questions) through the [http://groups.google.com/group/yard-parser project discussion list].
+
+ * [YardGeneralFAQ General Questions]
+ * [RecursiveDescentFAQ Recursive Descent]
+ * [StackOverflow Stack Overflow Concerns]
+ * [AdministrativaFAQ Administrative Questions]
