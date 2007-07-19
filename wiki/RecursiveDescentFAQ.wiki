@@ -1,0 +1,37 @@
+#labels FAQ
+= Recursive Descent =
+
+== What's a recursive descent parser? ==
+A parser is simply a programming system for recognizing certain patterns in text. For instance, when you run source code through a compiler, the way the compiler knows `int x = 4` means "the variable `x` will hold an integer value, and will start life holding the value 4" is that it has a parser looking for statements that start with a type (in this case `int`), followed by a name (in this case `x`), possibly followed by an equals sign and a beginning value.
+
+"Recursive descent" refers to a particular algorithm used in defining the patterns a parser is looking for. It's one of the simplest ways to implement a parser.
+
+== So what's recursive descent? ==
+
+Recursive descent is a system where functions know how to match certain sub-rules, and call each other in order to match complete rules. That is, to parse `int x = 4;`, you might create a function like:
+
+{{{
+bool match_declaration(char* line_to_parse) {
+      /* each function moves line_to_parse forward on success,
+         so we need to be able to restore where it was on failure
+      */
+
+    char* backtrack_on_failure = line_to_parse;
+
+    if (match_typename(line_to_parse))
+    {
+        if (match_identifier_name(line_to_parse))
+        {
+            if (match_semicolon(line_to_parse)) return true;
+            else if (match_equals_sign(line_to_parse))
+                if (match_number(line_to_parse))
+                    if (match_semicolon(line_to_parse)) return true;
+        };
+    };
+
+    line_to_parse = backtrack_on_failure;
+    return false;
+}
+}}}
+
+This isn't complete. It doesn't handle C-style struct literals, for instance. But the concept is there. Each function tries to match what it knows how to match, and some functions do that by calling other functions.
