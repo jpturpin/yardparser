@@ -1,6 +1,4 @@
 #labels FAQ
-= Administrativa =
-
 == Why does Google Code say YARD is under the MIT license, but Sourceforge says it's public domain? ==
 All code in YARD has been released as public domain code through [http://yard-parser.sourceforge.net/ the project hosted on Sourceforge].  However, Google Code will only host projects that are released under specific licenses.  Additionally, [http://scrivenerserror.blogspot.com/2007/01/taking-bad-with-good.html some lawyers] do not believe it is possible to release something into the public domain under current US law ("Under the 1976 Act as amended, the only two ways that a work can enter the public domain are expiration of term and failure of fixation").  And, according to the [http://www.sqlite.org/ SQLite] project, some legal systems don't seem to recognize the idea of public domain.
 
