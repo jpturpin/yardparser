@@ -35,7 +35,7 @@ If it's implemented correctly, `alloca` can handle this:
 
 {{{
 bool probe_stack(size_t needed_stack_frame_size) {
-    return alloca(needed_stack_frame_size) != NULL;
+    return NULL != alloca(needed_stack_frame_size);
 };
 }}}
 
