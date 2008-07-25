@@ -45,7 +45,7 @@ There are many interesting suggestions regarding fancier ways to handle stack ov
 
 [http://www.google.com/search?q=c+continuations+setjmp People have tried to abuse setjmp/longjmp] to save and restore the stack for this.  However, the restrictions on `setjmp`/`longjmp` exist so that `setjmp` doesn't actually have to save the stack.  Instead, it leaves the stack in place and stores a pointer to the current position on the stack.  `longjmp` can only be called while this position is valid; so it never has to restore the stack.
 
-We believe that implementing continuationsin C++ introduces much more complexity than the simple bounds checking demonstrated above.
+We believe that implementing continuations in C++ introduces much more complexity than the simple bounds checking demonstrated above.
 
  * [YARDGeneralFAQ General Questions]
  * [RecursiveDescentFAQ Recursive Descent]
