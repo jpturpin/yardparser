@@ -10,11 +10,7 @@ Submissions to the YARD project will not be accepted unless they are also releas
 
 == Colophon ==
 
-The YARD project is hosted on both Google Code and Sourceforge.  The website currently resides on Sourceforge's servers and general code releases are made through Sourceforge.  The main discussion list is hosted on [http://groups.google.com/group/yard-parser Google Groups].  This Wiki is on Google's servers, and code releases are mirrored through Google.
-
-Because Sourceforge hosts several project websites, special considerations sometimes crop up.  For instance, free access to the MySQL server is very nice.  However, with so many other projects also accessing the same server, the chance that at least one of them will somehow crash the server is actually quite high.  And, of course, performance can be affected at peak traffic times.
-
-The YARD website is largely implemented with CSS, Perl CGIs and a Berkeley DB database.  Using Berkeley DB helps avoid many stability and performance issues that would come with using the MySQL database.
+The YARD project is hosted on both Google Code and Sourceforge.  General code releases are made through Sourceforge.  The main discussion list is hosted on [http://groups.google.com/group/yard-parser Google Groups].  This Wiki is on Google's servers, and code releases are mirrored through Google.
 
  * [YARDGeneralFAQ General Questions]
  * [RecursiveDescentFAQ Recursive Descent]
