@@ -1,0 +1,3 @@
+Welcome to [Yet Another Recursive Descent (YARD) parsing framework for C++](http://yard-parser.sourceforge.net/). YARD is inspired by Boost.Spirit. YARD allows the specification of parsing expression grammars (PEG) using types and templates directly, instead of through operator overloading. The result is a very compact and efficient parser generating library.
+
+YARD parsers automatically perform tokenization and construction of abstract syntax trees.
